@@ -14,9 +14,16 @@
       --text:#111827;
       --soft:#f3f5fb;
       --line:#e5e7eb;
+
       --accent:#4f86e8;
       --accent2:#22c55e;
-      --shadow: 0 10px 30px rgba(0,0,0,.12);
+
+      /* Colors for INSIDE course items */
+      --c-slides:#4f86e8;
+      --c-labs:#a855f7;
+      --c-exams:#f59e0b;
+      --c-refs:#22c55e;
+
       --radius: 18px;
     }
 
@@ -106,6 +113,12 @@
     details.nav-group > summary{ list-style:none; }
     details.nav-group > summary::-webkit-details-marker{ display:none; }
 
+    /* Sidebar course title vs sub items (different colors) */
+    details.nav-group > summary span{
+      font-weight: 800;
+      color: rgba(255,255,255,.98);
+    }
+
     .chev{
       width:18px;height:18px;
       flex: 0 0 auto;
@@ -122,8 +135,12 @@
       border: 1px solid rgba(255,255,255,.08);
       font-size: 13px;
       border-radius: 12px;
+      color: rgba(255,255,255,.82);
     }
-    .nav-sub a:hover{ background: rgba(255,255,255,.12); }
+    .nav-sub a:hover{
+      background: rgba(255,255,255,.12);
+      color:#fff;
+    }
 
     /* Main */
     .main{ flex:1; padding: 26px; }
@@ -203,9 +220,16 @@
       gap:10px;
       margin: 0 0 12px;
     }
-    .section-head h3{ margin:0; font-size: 16px; }
 
-    /* This grid already makes LEFT/RIGHT */
+    /* Course title color (different from inside items) */
+    .course-card .section-head h3{
+      margin:0;
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--accent);
+      letter-spacing: -.01em;
+    }
+
     .links{
       display:grid;
       grid-template-columns: repeat(2, minmax(0,1fr));
@@ -225,7 +249,9 @@
       text-decoration:none;
       color: var(--text);
       transition: transform .08s ease;
-      min-height: 64px;
+      min-height: 68px;
+      position: relative;
+      overflow: hidden;
     }
     .link-card:hover{
       transform: translateY(-1px);
@@ -235,22 +261,46 @@
 
     .badge{
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 800;
       padding: 6px 10px;
       border-radius: 999px;
-      background: rgba(34,197,94,.12);
-      border: 1px solid rgba(34,197,94,.20);
-      color: #166534;
       white-space: nowrap;
     }
 
     .hint{
       font-size: 13px;
       color: var(--muted);
-      margin: 2px 0 0;
-      line-height:1.4;
+      margin: 3px 0 0;
+      line-height:1.35;
     }
 
+    /* INSIDE course items get their own colors */
+    .item-slides{ --item: var(--c-slides); }
+    .item-labs{   --item: var(--c-labs); }
+    .item-exams{  --item: var(--c-exams); }
+    .item-refs{   --item: var(--c-refs); }
+
+    .course-card .link-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: var(--item, transparent);
+      opacity: .06;              /* tint */
+      pointer-events:none;
+    }
+
+    .course-card .link-card b{
+      color: var(--item, var(--text));
+      font-weight: 900;
+    }
+
+    .course-card .link-card .badge{
+      background: color-mix(in srgb, var(--item) 14%, white);
+      border: 1px solid color-mix(in srgb, var(--item) 25%, white);
+      color: color-mix(in srgb, var(--item) 70%, #0b1025);
+    }
+
+    /* Responsive */
     @media (max-width: 980px){
       .grid{ grid-template-columns: 1fr; }
     }
@@ -288,7 +338,6 @@
       <nav class="nav">
         <a class="primary" href="#home">Home</a>
 
-        <!-- NOTE: links go to items inside each course card -->
         <details class="nav-group">
           <summary>
             <span>Digital System Design</span>
@@ -411,16 +460,14 @@
       </nav>
     </aside>
 
-    <!-- Main Content -->
+    <!-- Main -->
     <main class="main">
       <div class="topbar" id="home">
         <button class="hamburger" id="menuBtn" aria-label="Open menu">☰ Menu</button>
-
         <div class="page-title">
           <h2>Course Materials</h2>
           <p>Slides • Labs • Exams • References</p>
         </div>
-
         <span class="pill">Rafid Salih Sarhan ✅</span>
       </div>
 
@@ -428,7 +475,6 @@
         <section class="card">
           <div class="section-head">
             <h3>Instructor Profile</h3>
-            <span class="badge">Updated</span>
           </div>
 
           <table class="info">
@@ -438,47 +484,51 @@
             <tr><td>Email</td><td>Rafid.sarhan@uod.ac<br/>Rafid.Alsarhan@valpo.edu</td></tr>
           </table>
 
-          <p class="hint">Replace the links later by editing each <b>href</b>.</p>
+          <p class="hint">Change links later by editing each <b>href</b>.</p>
         </section>
 
         <section class="card">
           <div class="section-head"><h3>Quick Start</h3></div>
           <div class="links">
-            <a class="link-card" href="#ece-slides"><div><b>ECE Programming</b><div class="hint">Go to Slides</div></div><span class="badge">Open</span></a>
-            <a class="link-card" href="#web-slides"><div><b>Website Design</b><div class="hint">Go to Slides</div></div><span class="badge">Open</span></a>
-            <a class="link-card" href="#calc-slides"><div><b>Calculus</b><div class="hint">Go to Slides</div></div><span class="badge">Open</span></a>
-            <a class="link-card" href="#circuits-slides"><div><b>Electrical Circuits</b><div class="hint">Go to Slides</div></div><span class="badge">Open</span></a>
+            <a class="link-card item-slides" href="#ece-slides">
+              <div><b>ECE Programming</b><div class="hint">Go to Slides</div></div>
+              <span class="badge">Open</span>
+            </a>
+            <a class="link-card item-labs" href="#web-labs">
+              <div><b>Website Design</b><div class="hint">Go to Labs</div></div>
+              <span class="badge">Open</span>
+            </a>
+            <a class="link-card item-exams" href="#calc-exams">
+              <div><b>Calculus</b><div class="hint">Go to Exams</div></div>
+              <span class="badge">Open</span>
+            </a>
+            <a class="link-card item-refs" href="#circuits-refs">
+              <div><b>Electrical Circuits</b><div class="hint">Go to References</div></div>
+              <span class="badge">Open</span>
+            </a>
           </div>
         </section>
       </div>
 
-      <!-- ================== COURSES (ONE CARD EACH) ================== -->
-      <!-- Each course card contains 4 items in a 2x2 grid:
-           [Lectures/Slides | Lab Sheets]
-           [Exam Samples    | References]
-      -->
+      <!-- ================== COURSES (ONE CARD EACH, 2x2 items) ================== -->
 
-      <!-- TEMPLATE: copy this card for any new course -->
       <!-- Digital System Design -->
-      <section class="section card" id="dsd">
+      <section class="section card course-card" id="dsd">
         <div class="section-head"><h3>Digital System Design</h3></div>
         <div class="links">
-          <a class="link-card" id="dsd-slides" href="#">
+          <a class="link-card item-slides" id="dsd-slides" href="#">
             <div><b>Lectures (Slides)</b><div class="hint">Add your lectures link</div></div>
             <span class="badge">Link</span>
           </a>
-
-          <a class="link-card" id="dsd-labs" href="#">
+          <a class="link-card item-labs" id="dsd-labs" href="#">
             <div><b>Lab Sheets</b><div class="hint">Add lab sheets link</div></div>
             <span class="badge">Link</span>
           </a>
-
-          <a class="link-card" id="dsd-exams" href="#">
+          <a class="link-card item-exams" id="dsd-exams" href="#">
             <div><b>Exam Samples</b><div class="hint">Add exam samples link</div></div>
             <span class="badge">Link</span>
           </a>
-
-          <a class="link-card" id="dsd-refs" href="#">
+          <a class="link-card item-refs" id="dsd-refs" href="#">
             <div><b>References</b><div class="hint">Add references link</div></div>
             <span class="badge">Link</span>
           </a>
@@ -486,82 +536,81 @@
       </section>
 
       <!-- Computer Skills -->
-      <section class="section card" id="skills">
+      <section class="section card course-card" id="skills">
         <div class="section-head"><h3>Computer Skills</h3></div>
         <div class="links">
-          <a class="link-card" id="skills-slides" href="#"><div><b>Lectures (Slides)</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
-          <a class="link-card" id="skills-labs"   href="#"><div><b>Lab Sheets</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
-          <a class="link-card" id="skills-exams"  href="#"><div><b>Exam Samples</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
-          <a class="link-card" id="skills-refs"   href="#"><div><b>References</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-slides" id="skills-slides" href="#"><div><b>Lectures (Slides)</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-labs"   id="skills-labs"   href="#"><div><b>Lab Sheets</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-exams"  id="skills-exams"  href="#"><div><b>Exam Samples</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-refs"   id="skills-refs"   href="#"><div><b>References</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
         </div>
       </section>
 
       <!-- Website Design -->
-      <section class="section card" id="web">
+      <section class="section card course-card" id="web">
         <div class="section-head"><h3>Website Design</h3></div>
         <div class="links">
-          <a class="link-card" id="web-slides" href="#"><div><b>Lectures (Slides)</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
-          <a class="link-card" id="web-labs"   href="#"><div><b>Lab Sheets</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
-          <a class="link-card" id="web-exams"  href="#"><div><b>Exam Samples</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
-          <a class="link-card" id="web-refs"   href="#"><div><b>References</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-slides" id="web-slides" href="#"><div><b>Lectures (Slides)</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-labs"   id="web-labs"   href="#"><div><b>Lab Sheets</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-exams"  id="web-exams"  href="#"><div><b>Exam Samples</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-refs"   id="web-refs"   href="#"><div><b>References</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
         </div>
       </section>
 
       <!-- Data Structures & Algorithms -->
-      <section class="section card" id="dsa">
+      <section class="section card course-card" id="dsa">
         <div class="section-head"><h3>Data Structures & Algorithms</h3></div>
         <div class="links">
-          <a class="link-card" id="dsa-slides" href="#"><div><b>Lectures (Slides)</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
-          <a class="link-card" id="dsa-labs"   href="#"><div><b>Lab Sheets</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
-          <a class="link-card" id="dsa-exams"  href="#"><div><b>Exam Samples</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
-          <a class="link-card" id="dsa-refs"   href="#"><div><b>References</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-slides" id="dsa-slides" href="#"><div><b>Lectures (Slides)</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-labs"   id="dsa-labs"   href="#"><div><b>Lab Sheets</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-exams"  id="dsa-exams"  href="#"><div><b>Exam Samples</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-refs"   id="dsa-refs"   href="#"><div><b>References</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
         </div>
       </section>
 
       <!-- Computer Programming for ECE -->
-      <section class="section card" id="ece">
+      <section class="section card course-card" id="ece">
         <div class="section-head"><h3>Computer Programming for ECE</h3></div>
         <div class="links">
-          <a class="link-card" id="ece-slides" href="#"><div><b>Lectures (Slides)</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
-          <a class="link-card" id="ece-labs"   href="#"><div><b>Lab Sheets</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
-          <a class="link-card" id="ece-exams"  href="#"><div><b>Exam Samples</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
-          <a class="link-card" id="ece-refs"   href="#"><div><b>References</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-slides" id="ece-slides" href="#"><div><b>Lectures (Slides)</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-labs"   id="ece-labs"   href="#"><div><b>Lab Sheets</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-exams"  id="ece-exams"  href="#"><div><b>Exam Samples</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-refs"   id="ece-refs"   href="#"><div><b>References</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
         </div>
       </section>
 
       <!-- Computer Programming for BME -->
-      <section class="section card" id="bme">
+      <section class="section card course-card" id="bme">
         <div class="section-head"><h3>Computer Programming for BME</h3></div>
         <div class="links">
-          <a class="link-card" id="bme-slides" href="#"><div><b>Lectures (Slides)</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
-          <a class="link-card" id="bme-labs"   href="#"><div><b>Lab Sheets</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
-          <a class="link-card" id="bme-exams"  href="#"><div><b>Exam Samples</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
-          <a class="link-card" id="bme-refs"   href="#"><div><b>References</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-slides" id="bme-slides" href="#"><div><b>Lectures (Slides)</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-labs"   id="bme-labs"   href="#"><div><b>Lab Sheets</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-exams"  id="bme-exams"  href="#"><div><b>Exam Samples</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-refs"   id="bme-refs"   href="#"><div><b>References</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
         </div>
       </section>
 
       <!-- Calculus -->
-      <section class="section card" id="calc">
+      <section class="section card course-card" id="calc">
         <div class="section-head"><h3>Calculus</h3></div>
         <div class="links">
-          <a class="link-card" id="calc-slides" href="#"><div><b>Lectures (Slides)</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
-          <a class="link-card" id="calc-labs"   href="#"><div><b>Lab Sheets</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
-          <a class="link-card" id="calc-exams"  href="#"><div><b>Exam Samples</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
-          <a class="link-card" id="calc-refs"   href="#"><div><b>References</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-slides" id="calc-slides" href="#"><div><b>Lectures (Slides)</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-labs"   id="calc-labs"   href="#"><div><b>Lab Sheets</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-exams"  id="calc-exams"  href="#"><div><b>Exam Samples</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-refs"   id="calc-refs"   href="#"><div><b>References</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
         </div>
       </section>
 
       <!-- Electrical Circuits -->
-      <section class="section card" id="circuits">
+      <section class="section card course-card" id="circuits">
         <div class="section-head"><h3>Electrical Circuits</h3></div>
         <div class="links">
-          <a class="link-card" id="circuits-slides" href="#"><div><b>Lectures (Slides)</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
-          <a class="link-card" id="circuits-labs"   href="#"><div><b>Lab Sheets</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
-          <a class="link-card" id="circuits-exams"  href="#"><div><b>Exam Samples</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
-          <a class="link-card" id="circuits-refs"   href="#"><div><b>References</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-slides" id="circuits-slides" href="#"><div><b>Lectures (Slides)</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-labs"   id="circuits-labs"   href="#"><div><b>Lab Sheets</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-exams"  id="circuits-exams"  href="#"><div><b>Exam Samples</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
+          <a class="link-card item-refs"   id="circuits-refs"   href="#"><div><b>References</b><div class="hint">Add link</div></div><span class="badge">Link</span></a>
         </div>
       </section>
-
     </main>
   </div>
 
@@ -581,7 +630,7 @@
       });
     });
 
-    // Prevent placeholder links (#) from jumping to the top
+    // Prevent placeholder links (#) from jumping to the top (but keep real anchors working)
     document.querySelectorAll('a[href="#"]').forEach(a => {
       a.addEventListener("click", (e) => e.preventDefault());
     });
